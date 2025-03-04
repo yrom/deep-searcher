@@ -6,15 +6,20 @@ from deepsearcher.loader.splitter import Chunk
 
 
 class BaseEmbedding:
+    # The size for embedding documents in batch
+    batch_size: int = 256
+
     def embed_query(self, text: str) -> List[float]:
         pass
 
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
         return [self.embed_query(text) for text in texts]
 
-    def embed_chunks(self, chunks: List[Chunk], batch_size=256) -> List[Chunk]:
+    def embed_chunks(self, chunks: List[Chunk]) -> List[Chunk]:
         texts = [chunk.text for chunk in chunks]
-        batch_texts = [texts[i : i + batch_size] for i in range(0, len(texts), batch_size)]
+        batch_texts = [
+            texts[i : i + self.batch_size] for i in range(0, len(texts), self.batch_size)
+        ]
         embeddings = []
         for batch_text in tqdm(batch_texts, desc="Embedding chunks"):
             batch_embeddings = self.embed_documents(batch_text)

@@ -15,7 +15,7 @@ class VoyageEmbedding(BaseEmbedding):
     https://docs.voyageai.com/embeddings/
     """
 
-    def __init__(self, model="voyage-3", **kwargs):
+    def __init__(self, model="voyage-3", batch_size=128, **kwargs):
         if "model_name" in kwargs and (not model or model == "voyage-3"):
             model = kwargs.pop("model_name")
         self.model = model
@@ -24,7 +24,7 @@ class VoyageEmbedding(BaseEmbedding):
         else:
             api_key = os.getenv("VOYAGE_API_KEY")
         self.voyageai_api_key = api_key
-
+        self.batch_size = batch_size
         import voyageai
 
         voyageai.api_key = self.voyageai_api_key

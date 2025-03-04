@@ -17,7 +17,7 @@ class OpenAIEmbedding(BaseEmbedding):
     https://platform.openai.com/docs/guides/embeddings/use-cases
     """
 
-    def __init__(self, model: str = "text-embedding-ada-002", **kwargs):
+    def __init__(self, model: str = "text-embedding-ada-002", batch_size=64, **kwargs):
         """
 
         Args:
@@ -45,6 +45,7 @@ class OpenAIEmbedding(BaseEmbedding):
             dimension = OPENAI_MODEL_DIM_MAP[model]
         self.dim = dimension
         self.model = model
+        self.batch_size = batch_size
         self.client = OpenAI(api_key=api_key, base_url=base_url, **kwargs)
 
     def _get_dim(self):
